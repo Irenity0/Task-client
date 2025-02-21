@@ -3,6 +3,8 @@ import Layout from "../Layout/Layout";
 import HomePage from "../Pages/HomePage";
 import Dashboard from "../Pages/Dashboard";
 import PrivateRoute from "./PrivateRoute";
+import AddTask from "../components/AddTask";
+import EditTask from "../components/EditTask";
 
 const router = createBrowserRouter([
     {
@@ -16,6 +18,14 @@ const router = createBrowserRouter([
             {
                 path: 'dashboard',
                 element: <PrivateRoute><Dashboard/></PrivateRoute>
+            },
+            {
+                path: 'addTask',
+                element: <PrivateRoute><AddTask/></PrivateRoute>
+            },
+            {
+                path: 'edit/:taskId',
+                element: <PrivateRoute><EditTask/></PrivateRoute>
             }
         ]
     }

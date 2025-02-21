@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import { useNavigate } from "react-router-dom";
 
 const AddTask = () => {
     
@@ -9,6 +10,7 @@ const AddTask = () => {
     const [description, setDecription] = useState('');
     const [status, setStatus] = useState('todo');
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
     
     const handleSubmit = async e => {
         e.preventDefault();
@@ -23,6 +25,7 @@ const AddTask = () => {
         const response = await axiosSecure.post('/tasks', newTask)
         if (response.data.insertedId) {
             alert('task added');
+            navigate('/dashboard')
           }
 
         setTitle("");
@@ -33,7 +36,8 @@ const AddTask = () => {
     
 
     return (
-        <div className="w-1/2 mx-auto">
+    <>
+    <div className="w-1/2 mt-40 mx-auto">
       <h2 className="text-2xl font-bold text-center mb-4">Create a Task</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -63,6 +67,7 @@ const AddTask = () => {
         <button type="submit" className="btn btn-soft">Add Task</button>
       </form>
     </div>
+    </>
     );
 };
 
