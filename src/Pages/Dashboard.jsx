@@ -8,7 +8,6 @@ import { useState, useEffect } from "react";
 const Dashboard = () => {
   const { loading, logOut } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const queryClient = useQueryClient();
 
   // Fetch tasks securely
   const { data: tasks = [], refetch, isLoading } = useQuery({
@@ -37,10 +36,12 @@ const Dashboard = () => {
     }
   }, [tasks]);
 
-  // Update task status mutation
+  // Update task status mutation using PATCH
   const updateTaskMutation = useMutation({
     mutationFn: async (updatedTask) => {
-      await axiosSecure.put(`/tasks/${updatedTask._id}`, updatedTask);
+      await axiosSecure.patch(`/tasks/${updatedTask._id}/status`, {
+        status: updatedTask.status,
+      });
     },
     onSuccess: () => {
       refetch(); // Refetch tasks after updating
@@ -59,24 +60,40 @@ const Dashboard = () => {
 
   // Handle drag end
   const onDragEnd = (result) => {
-    if (!result.destination) return;
-
+    if (!result.destination) return; // If dropped outside a valid destination, return early
+  
     const { source, destination } = result;
     const sourceColumn = taskColumns[source.droppableId];
     const destColumn = taskColumns[destination.droppableId];
-
+  
+    // Check if task is being moved within the same column
+    const isSameColumn = source.droppableId === destination.droppableId;
+  
     const [movedTask] = sourceColumn.splice(source.index, 1);
+    // If moving within the same column, only update the order (no status change)
+    if (isSameColumn) {
+      sourceColumn.splice(destination.index, 0, movedTask);
+      setTaskColumns({
+        ...taskColumns,
+        [source.droppableId]: sourceColumn, // Update the task order in the same column
+      });
+      return; // Skip status update
+    }
+  
+    // If task is moved to a different column, update the status
     movedTask.status = destination.droppableId;
     destColumn.splice(destination.index, 0, movedTask);
-
+  
     setTaskColumns({
       ...taskColumns,
       [source.droppableId]: sourceColumn,
       [destination.droppableId]: destColumn,
     });
-
+  
+    // Only update the status if the status has changed
     updateTaskMutation.mutate(movedTask);
   };
+  
 
   const handleLogout = () => {
     logOut()
@@ -129,14 +146,14 @@ const Dashboard = () => {
                           <div className="flex justify-between items-center">
                             <span>{task.title}</span>
                             <div className="flex gap-2">
-                              <Link 
+                              <Link
                                 to={`/edit/${task._id}`}
                                 className="btn btn-sm btn-primary"
                               >
                                 Edit
                               </Link>
-                              <button 
-                                onClick={() => handleDelete(task._id)} 
+                              <button
+                                onClick={() => handleDelete(task._id)}
                                 className="btn btn-sm btn-error"
                               >
                                 Delete
