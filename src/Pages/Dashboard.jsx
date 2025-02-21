@@ -105,7 +105,7 @@ const Dashboard = () => {
     deleteTaskMutation.mutate(taskId);
   };
 
-  if (loading || isLoading || !tasks.length) return <div>Loading...</div>;
+  if (loading || isLoading ) return <div>Loading...</div>;
 
   return (
     <>
