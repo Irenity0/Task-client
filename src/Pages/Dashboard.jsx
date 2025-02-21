@@ -93,7 +93,6 @@ const Dashboard = () => {
     // Only update the status if the status has changed
     updateTaskMutation.mutate(movedTask);
   };
-  
 
   const handleLogout = () => {
     logOut()
@@ -105,7 +104,7 @@ const Dashboard = () => {
     deleteTaskMutation.mutate(taskId);
   };
 
-  if (loading || isLoading ) return <div>Loading...</div>;
+  if (loading || isLoading) return <div>Loading...</div>;
 
   return (
     <>
@@ -134,36 +133,40 @@ const Dashboard = () => {
                   ref={provided.innerRef}
                 >
                   <h2 className="text-lg font-bold text-center capitalize">{status}</h2>
-                  {taskColumns[status].map((task, taskIndex) => (
-                    <Draggable key={task._id} draggableId={task._id} index={taskIndex}>
-                      {(provided) => (
-                        <div
-                          className="bg-base-200 p-2 rounded-md shadow-md mt-2"
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <div className="flex justify-between items-center">
-                            <span>{task.title}</span>
-                            <div className="flex gap-2">
-                              <Link
-                                to={`/edit/${task._id}`}
-                                className="btn btn-sm btn-primary"
-                              >
-                                Edit
-                              </Link>
-                              <button
-                                onClick={() => handleDelete(task._id)}
-                                className="btn btn-sm btn-error"
-                              >
-                                Delete
-                              </button>
+                  {taskColumns[status].length === 0 ? (
+                    <div className="text-center text-gray-500">No tasks in this column</div>
+                  ) : (
+                    taskColumns[status].map((task, taskIndex) => (
+                      <Draggable key={task._id} draggableId={task._id} index={taskIndex}>
+                        {(provided) => (
+                          <div
+                            className="bg-base-200 p-2 rounded-md shadow-md mt-2"
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <div className="flex justify-between items-center">
+                              <span>{task.title}</span>
+                              <div className="flex gap-2">
+                                <Link
+                                  to={`/edit/${task._id}`}
+                                  className="btn btn-sm btn-primary"
+                                >
+                                  Edit
+                                </Link>
+                                <button
+                                  onClick={() => handleDelete(task._id)}
+                                  className="btn btn-sm btn-error"
+                                >
+                                  Delete
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
+                        )}
+                      </Draggable>
+                    ))
+                  )}
                   {provided.placeholder}
                 </div>
               )}
