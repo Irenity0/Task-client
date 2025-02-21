@@ -1,3 +1,4 @@
+import AddTask from "../components/AddTask";
 import useAuth from "../hooks/useAuth";
 
 const Dashboard = () => {
@@ -23,6 +24,8 @@ const Dashboard = () => {
             <input type="checkbox" value="light" className="toggle theme-controller" />
             </div>
         </div>
+        <br />
+            <AddTask/>
         </>
     );
 };
