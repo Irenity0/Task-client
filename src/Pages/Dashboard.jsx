@@ -16,8 +16,13 @@ const Dashboard = () => {
 
     return (
         <>
-        <h2>Dashboard hello {user.displayName}</h2>
-        <button className="btn btn-soft" onClick={handleLogout}>Log out</button>
+        <div className="bg-base-300">
+            <div className="w-11/12 mx-auto py-4 flex items-center justify-between">
+            <button className="btn btn-soft" onClick={handleLogout}>Log out</button>
+            <h2>Task No Jujutsu! Sorcerer: <b>{user.displayName}</b></h2>
+            <input type="checkbox" value="light" className="toggle theme-controller" />
+            </div>
+        </div>
         </>
     );
 };
