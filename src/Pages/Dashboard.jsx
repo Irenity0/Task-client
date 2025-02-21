@@ -123,7 +123,7 @@ const Dashboard = () => {
       <br />
 
       {/* Kanban Board */}
-      <div className="flex justify-center gap-6">
+      <div className="md:flex space-y-10 ml-15 md:ml-0 justify-center gap-6">
         <DragDropContext onDragEnd={onDragEnd}>
           {Object.keys(taskColumns).map((status) => (
             <Droppable key={status} droppableId={status} isCombineEnabled={false} ignoreContainerClipping={false} isDropDisabled={false}>
